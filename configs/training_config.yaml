@@ -1,0 +1,101 @@
+# Training Configuration
+# Fingerprint Blood Group Detection
+
+# Model Configuration
+model:
+  name: "efficientnet_b3_cbam"
+  pretrained: true
+  num_classes: 8
+  dropout: 0.3
+  attention_reduction: 16
+
+# Data Configuration
+data:
+  root_dir: "Dataset"
+  image_size: 224
+  train_split: 0.70
+  val_split: 0.15
+  test_split: 0.15
+  num_workers: 4
+  pin_memory: true
+
+# Blood Group Classes
+classes:
+  - "A+"
+  - "A-"
+  - "B+"
+  - "B-"
+  - "AB+"
+  - "AB-"
+  - "O+"
+  - "O-"
+
+# Training Configuration
+training:
+  batch_size: 32
+  epochs: 50
+  early_stopping_patience: 10
+  gradient_accumulation_steps: 1
+
+# Optimizer Configuration
+optimizer:
+  name: "adamw"
+  lr: 0.0001
+  weight_decay: 0.01
+  betas: [0.9, 0.999]
+
+# Learning Rate Scheduler
+scheduler:
+  name: "cosine_annealing_warm_restarts"
+  T_0: 10
+  T_mult: 2
+  eta_min: 0.000001
+
+# Loss Function
+loss:
+  name: "focal_loss"
+  gamma: 2.0
+  alpha: null  # Will be computed from class weights
+
+# Data Augmentation
+augmentation:
+  train:
+    horizontal_flip: true
+    vertical_flip: false
+    rotation: 15
+    brightness: 0.2
+    contrast: 0.2
+    gaussian_blur: 0.1
+    elastic_transform: true
+  val:
+    # No augmentation for validation
+    normalize_only: true
+
+# Mixed Precision Training
+mixed_precision: true
+
+# Checkpointing
+checkpoint:
+  save_dir: "checkpoints"
+  save_best: true
+  save_last: true
+  monitor: "val_accuracy"
+  mode: "max"
+
+# Logging
+logging:
+  log_dir: "outputs/logs"
+  log_interval: 10
+  tensorboard: true
+
+# Cross Validation
+cross_validation:
+  enabled: false
+  n_folds: 5
+  stratified: true
+
+# Random Seed
+seed: 42
+
+# Device
+device: "auto"  # auto, cuda, cpu
