@@ -110,8 +110,8 @@ function App() {
                     <div className="flex gap-4 mb-8">
                         <button
                             className={`px-6 py-3 rounded-xl font-medium transition-all ${activeTab === 'upload'
-                                    ? 'bg-primary text-white'
-                                    : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                                ? 'bg-primary text-white'
+                                : 'bg-white/5 text-gray-400 hover:bg-white/10'
                                 }`}
                             onClick={() => setActiveTab('upload')}
                         >
@@ -119,8 +119,8 @@ function App() {
                         </button>
                         <button
                             className={`px-6 py-3 rounded-xl font-medium transition-all ${activeTab === 'results'
-                                    ? 'bg-primary text-white'
-                                    : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                                ? 'bg-primary text-white'
+                                : 'bg-white/5 text-gray-400 hover:bg-white/10'
                                 }`}
                             onClick={() => setActiveTab('results')}
                             disabled={!result}
@@ -129,8 +129,8 @@ function App() {
                         </button>
                         <button
                             className={`px-6 py-3 rounded-xl font-medium transition-all ${activeTab === 'explain'
-                                    ? 'bg-primary text-white'
-                                    : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                                ? 'bg-primary text-white'
+                                : 'bg-white/5 text-gray-400 hover:bg-white/10'
                                 }`}
                             onClick={() => setActiveTab('explain')}
                             disabled={!explanation}

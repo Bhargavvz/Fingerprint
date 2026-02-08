@@ -47,7 +47,7 @@ export default function GradCAMViewer({ originalImage, gradcamImage, explanation
                         />
                         {showOverlay && gradcamImage && (
                             <img
-                                src={`data:image/png;base64,${gradcamImage}`}
+                                src={gradcamImage.startsWith('data:') ? gradcamImage : `data:image/png;base64,${gradcamImage}`}
                                 alt="Grad-CAM overlay"
                                 className="absolute inset-0 w-full h-64 object-contain mix-blend-multiply"
                                 style={{ opacity }}
