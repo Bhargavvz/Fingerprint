@@ -68,6 +68,12 @@ echo "🐍 Creating Python virtual environment..."
 python3 -m venv venv
 source venv/bin/activate
 
+# Create python symlink if it doesn't exist
+if ! command -v python &> /dev/null; then
+    echo "🔧 Creating python -> python3 symlink..."
+    sudo ln -sf /usr/bin/python3 /usr/bin/python
+fi
+
 # Upgrade pip
 pip install --upgrade pip
 

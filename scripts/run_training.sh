@@ -40,7 +40,7 @@ echo ""
 
 # Start training with logging
 echo "🚀 Launching training..."
-python scripts/train_advanced.py \
+python3 scripts/train_advanced.py \
     --config $CONFIG \
     --gpus $GPUS \
     2>&1 | tee outputs/logs/training_$TIMESTAMP.log
