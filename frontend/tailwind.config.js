@@ -8,43 +8,33 @@ export default {
         extend: {
             colors: {
                 primary: {
-                    50: '#f0f9ff',
-                    100: '#e0f2fe',
-                    200: '#bae6fd',
-                    300: '#7dd3fc',
-                    400: '#38bdf8',
-                    500: '#0ea5e9',
-                    600: '#0284c7',
-                    700: '#0369a1',
-                    800: '#075985',
-                    900: '#0c4a6e',
-                    950: '#082f49',
+                    DEFAULT: '#6366f1',
+                    dark: '#4f46e5',
+                    light: '#818cf8',
                 },
+                secondary: '#ec4899',
+                accent: '#06b6d4',
                 blood: {
-                    A: '#ef4444',
-                    B: '#3b82f6',
-                    AB: '#8b5cf6',
-                    O: '#22c55e',
-                }
+                    'a-plus': '#ef4444',
+                    'a-minus': '#f97316',
+                    'b-plus': '#3b82f6',
+                    'b-minus': '#6366f1',
+                    'ab-plus': '#8b5cf6',
+                    'ab-minus': '#a855f7',
+                    'o-plus': '#22c55e',
+                    'o-minus': '#14b8a6',
+                },
+            },
+            fontFamily: {
+                sans: ['Inter', 'SF Pro Display', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
             },
             animation: {
-                'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                'gradient': 'gradient 8s linear infinite',
                 'float': 'float 6s ease-in-out infinite',
+                'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
-            keyframes: {
-                gradient: {
-                    '0%, 100%': { backgroundPosition: '0% 50%' },
-                    '50%': { backgroundPosition: '100% 50%' },
-                },
-                float: {
-                    '0%, 100%': { transform: 'translateY(0)' },
-                    '50%': { transform: 'translateY(-10px)' },
-                }
+            backdropBlur: {
+                xs: '2px',
             },
-            backgroundSize: {
-                '300%': '300%',
-            }
         },
     },
     plugins: [],

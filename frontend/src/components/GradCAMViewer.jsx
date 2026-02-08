@@ -1,96 +1,146 @@
-import { useState } from 'react'
-import { Eye, Info, Layers } from 'lucide-react'
+import React, { useState } from 'react';
 
-function GradCAMViewer({ originalImage, gradcamImage, explanation }) {
-    const [showOriginal, setShowOriginal] = useState(false)
+export default function GradCAMViewer({ originalImage, gradcamImage, explanation, bloodGroup }) {
+    const [showOverlay, setShowOverlay] = useState(true);
+    const [opacity, setOpacity] = useState(0.6);
 
     return (
-        <div className="glass rounded-2xl p-6 space-y-6">
+        <div className="space-y-6">
             {/* Header */}
-            <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-purple-500/20">
-                    <Layers className="w-5 h-5 text-purple-400" />
-                </div>
+            <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-xl font-semibold text-white">Explainable AI</h2>
-                    <p className="text-sm text-slate-400">Grad-CAM Visualization</p>
+                    <h3 className="text-2xl font-bold gradient-text">🔍 Visual Explanation</h3>
+                    <p className="text-gray-400 mt-1">
+                        Grad-CAM highlights regions that influenced the prediction
+                    </p>
                 </div>
             </div>
 
             {/* Image Viewer */}
-            <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-800/50 border border-white/10">
-                {gradcamImage ? (
-                    <img
-                        src={showOriginal ? originalImage : gradcamImage}
-                        alt={showOriginal ? 'Original fingerprint' : 'Grad-CAM heatmap'}
-                        className="w-full h-full object-contain"
-                    />
-                ) : originalImage ? (
-                    <img
-                        src={originalImage}
-                        alt="Original fingerprint"
-                        className="w-full h-full object-contain"
-                    />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center text-slate-500">
-                        No image available
+            <div className="grid md:grid-cols-2 gap-6">
+                {/* Original Image */}
+                <div className="glass p-4 rounded-2xl">
+                    <h4 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                        <span>📷</span>
+                        Original Fingerprint
+                    </h4>
+                    <div className="relative rounded-xl overflow-hidden bg-black/30">
+                        <img
+                            src={originalImage}
+                            alt="Original fingerprint"
+                            className="w-full h-64 object-contain"
+                        />
                     </div>
-                )}
+                </div>
 
-                {/* Toggle Button */}
-                {gradcamImage && (
-                    <button
-                        onClick={() => setShowOriginal(!showOriginal)}
-                        className="absolute bottom-4 right-4 flex items-center gap-2 px-3 py-2 rounded-lg bg-black/60 backdrop-blur-sm text-white text-sm hover:bg-black/80 transition-colors"
-                    >
-                        <Eye className="w-4 h-4" />
-                        {showOriginal ? 'Show Heatmap' : 'Show Original'}
-                    </button>
-                )}
-
-                {/* Overlay Labels */}
-                <div className="absolute top-4 left-4 flex gap-2">
-                    {gradcamImage && (
-                        <div className="px-2 py-1 rounded bg-purple-500/80 text-white text-xs font-medium">
-                            {showOriginal ? 'Original' : 'Grad-CAM'}
-                        </div>
-                    )}
+                {/* Grad-CAM Overlay */}
+                <div className="glass p-4 rounded-2xl">
+                    <h4 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                        <span>🔥</span>
+                        Attention Heatmap
+                    </h4>
+                    <div className="relative rounded-xl overflow-hidden bg-black/30">
+                        <img
+                            src={originalImage}
+                            alt="Base fingerprint"
+                            className="w-full h-64 object-contain"
+                        />
+                        {showOverlay && gradcamImage && (
+                            <img
+                                src={`data:image/png;base64,${gradcamImage}`}
+                                alt="Grad-CAM overlay"
+                                className="absolute inset-0 w-full h-64 object-contain mix-blend-multiply"
+                                style={{ opacity }}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
 
-            {/* Explanation */}
-            <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                    <Info className="w-4 h-4 text-blue-400" />
-                    <h3 className="text-sm font-medium text-slate-400">Model Explanation</h3>
+            {/* Controls */}
+            <div className="glass p-4 rounded-2xl">
+                <div className="flex flex-wrap items-center gap-6">
+                    {/* Toggle Overlay */}
+                    <label className="flex items-center gap-3 cursor-pointer">
+                        <div
+                            className={`w-12 h-6 rounded-full transition-colors ${showOverlay ? 'bg-primary' : 'bg-gray-600'
+                                }`}
+                            onClick={() => setShowOverlay(!showOverlay)}
+                        >
+                            <div
+                                className={`w-5 h-5 rounded-full bg-white shadow-md transform transition-transform ${showOverlay ? 'translate-x-6' : 'translate-x-0.5'
+                                    } mt-0.5`}
+                            />
+                        </div>
+                        <span className="text-gray-300 text-sm">Show Overlay</span>
+                    </label>
+
+                    {/* Opacity Slider */}
+                    <div className="flex items-center gap-3">
+                        <span className="text-gray-400 text-sm">Opacity:</span>
+                        <input
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.1"
+                            value={opacity}
+                            onChange={(e) => setOpacity(parseFloat(e.target.value))}
+                            className="w-32 accent-primary"
+                        />
+                        <span className="text-gray-300 text-sm w-12">{(opacity * 100).toFixed(0)}%</span>
+                    </div>
                 </div>
-                <p className="text-slate-300 text-sm leading-relaxed">
-                    {explanation || 'The model analyzes fingerprint ridge patterns and their unique characteristics to predict blood group. The heatmap shows which regions of the fingerprint the model focused on most heavily for its prediction.'}
-                </p>
             </div>
 
-            {/* Color Legend */}
-            {gradcamImage && (
-                <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-slate-400">Heatmap Legend</h3>
-                    <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded bg-gradient-to-r from-blue-500 to-cyan-400"></div>
-                            <span className="text-xs text-slate-400">Low Importance</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded bg-gradient-to-r from-yellow-500 to-orange-400"></div>
-                            <span className="text-xs text-slate-400">Medium</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded bg-gradient-to-r from-red-500 to-red-600"></div>
-                            <span className="text-xs text-slate-400">High Importance</span>
+            {/* Explanation Text */}
+            {explanation?.explanation && (
+                <div className="glass p-6 rounded-2xl">
+                    <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                        <span>💡</span>
+                        AI Interpretation
+                    </h4>
+                    <div className="space-y-4 text-gray-300">
+                        <p>{explanation.explanation}</p>
+
+                        {/* Key Features */}
+                        <div className="grid sm:grid-cols-3 gap-4 mt-6">
+                            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                                <p className="text-gray-400 text-xs uppercase mb-1">Confidence</p>
+                                <p className="text-2xl font-bold text-primary">
+                                    {((explanation.confidence || 0) * 100).toFixed(1)}%
+                                </p>
+                            </div>
+                            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                                <p className="text-gray-400 text-xs uppercase mb-1">Predicted Class</p>
+                                <p className="text-2xl font-bold text-white">{bloodGroup}</p>
+                            </div>
+                            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                                <p className="text-gray-400 text-xs uppercase mb-1">Model</p>
+                                <p className="text-lg font-bold text-accent">EfficientNet-B3</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             )}
-        </div>
-    )
-}
 
-export default GradCAMViewer
+            {/* Legend */}
+            <div className="glass p-4 rounded-2xl">
+                <h4 className="text-sm font-semibold text-gray-300 mb-3">Color Legend</h4>
+                <div className="flex items-center gap-4">
+                    <div className="flex-1 h-4 rounded-lg" style={{
+                        background: 'linear-gradient(to right, #3b82f6, #06b6d4, #22c55e, #eab308, #f97316, #ef4444)'
+                    }} />
+                </div>
+                <div className="flex justify-between mt-2 text-xs text-gray-400">
+                    <span>Low Importance</span>
+                    <span>Medium</span>
+                    <span>High Importance</span>
+                </div>
+                <p className="text-xs text-gray-500 mt-3">
+                    Red/yellow regions indicate areas the model focused on when making its prediction.
+                    These typically highlight ridge patterns, core formations, and delta points.
+                </p>
+            </div>
+        </div>
+    );
+}

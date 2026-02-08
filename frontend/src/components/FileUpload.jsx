@@ -1,87 +1,110 @@
-import { useCallback } from 'react'
-import { useDropzone } from 'react-dropzone'
-import { Upload, Image, Loader2 } from 'lucide-react'
+import React from 'react';
+import { useDropzone } from 'react-dropzone';
 
-function FileUpload({ onUpload, loading }) {
-    const onDrop = useCallback((acceptedFiles) => {
-        if (acceptedFiles.length > 0) {
-            onUpload(acceptedFiles[0])
-        }
-    }, [onUpload])
-
+export default function FileUpload({ onDrop, loading, preview }) {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept: {
-            'image/*': ['.png', '.jpg', '.jpeg', '.bmp']
+            'image/*': ['.jpeg', '.jpg', '.png', '.bmp', '.gif']
         },
         maxFiles: 1,
         disabled: loading
-    })
+    });
 
     return (
-        <div className="gradient-border p-[2px] rounded-2xl">
-            <div
-                {...getRootProps()}
-                className={`
-          glass-dark rounded-2xl p-12 cursor-pointer
-          transition-all duration-300 ease-out
-          ${isDragActive ? 'upload-zone active scale-[1.02]' : 'upload-zone'}
-          ${loading ? 'opacity-60 cursor-not-allowed' : 'hover:scale-[1.01]'}
-        `}
-            >
-                <input {...getInputProps()} />
+        <div
+            {...getRootProps()}
+            className={`upload-zone relative ${isDragActive ? 'dragover' : ''} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+            <input {...getInputProps()} />
 
-                <div className="text-center">
-                    {loading ? (
-                        <>
-                            <div className="relative w-20 h-20 mx-auto mb-6">
-                                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 animate-spin" />
-                                <div className="absolute inset-1 rounded-full bg-slate-900 flex items-center justify-center">
-                                    <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
-                                </div>
-                            </div>
-                            <h3 className="text-xl font-semibold text-white mb-2">
-                                Analyzing Fingerprint...
-                            </h3>
-                            <p className="text-slate-400">
-                                Running deep learning model
-                            </p>
-                        </>
-                    ) : (
-                        <>
-                            <div className={`
-                w-20 h-20 mx-auto mb-6 rounded-2xl
-                bg-gradient-to-br from-blue-500/20 to-purple-500/20
-                border border-white/10 flex items-center justify-center
-                transition-transform duration-300
-                ${isDragActive ? 'scale-110' : ''}
-              `}>
-                                {isDragActive ? (
-                                    <Image className="w-10 h-10 text-blue-400 animate-pulse" />
-                                ) : (
-                                    <Upload className="w-10 h-10 text-blue-400" />
-                                )}
-                            </div>
+            {loading ? (
+                <div className="flex flex-col items-center gap-6">
+                    {/* Loading Animation */}
+                    <div className="relative">
+                        <div className="spinner"></div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-2xl">🔬</span>
+                        </div>
+                    </div>
 
-                            <h3 className="text-xl font-semibold text-white mb-2">
-                                {isDragActive ? 'Drop your fingerprint image' : 'Upload Fingerprint Image'}
-                            </h3>
+                    <div>
+                        <p className="text-xl font-semibold text-white mb-2">Analyzing Fingerprint...</p>
+                        <div className="loading-dots justify-center">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
 
-                            <p className="text-slate-400 mb-4">
-                                Drag and drop or click to select
-                            </p>
-
-                            <div className="flex items-center justify-center gap-2 text-sm text-slate-500">
-                                <span className="px-2 py-1 rounded bg-white/5">PNG</span>
-                                <span className="px-2 py-1 rounded bg-white/5">JPG</span>
-                                <span className="px-2 py-1 rounded bg-white/5">BMP</span>
-                            </div>
-                        </>
-                    )}
+                    <p className="text-gray-400 text-sm">
+                        Our AI is examining ridge patterns and minutiae features
+                    </p>
                 </div>
-            </div>
-        </div>
-    )
-}
+            ) : preview ? (
+                <div className="flex flex-col items-center gap-6">
+                    {/* Preview Image */}
+                    <div className="relative group">
+                        <img
+                            src={preview}
+                            alt="Fingerprint preview"
+                            className="max-h-48 rounded-xl object-contain shadow-2xl transition-transform group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-4">
+                            <span className="text-white text-sm">Click or drop to replace</span>
+                        </div>
+                    </div>
 
-export default FileUpload
+                    <div>
+                        <p className="text-lg font-medium text-white">Image Ready</p>
+                        <p className="text-gray-400 text-sm mt-1">Click to upload a different image</p>
+                    </div>
+                </div>
+            ) : (
+                <div className="flex flex-col items-center gap-6">
+                    {/* Upload Icon */}
+                    <div className="relative">
+                        <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <span className="text-5xl">{isDragActive ? '📥' : '👆'}</span>
+                        </div>
+                        {/* Pulse Ring */}
+                        <div className="absolute inset-0 rounded-2xl border-2 border-primary/40 animate-ping opacity-20"></div>
+                    </div>
+
+                    <div>
+                        <p className="text-xl font-semibold text-white mb-2">
+                            {isDragActive ? 'Drop your fingerprint here!' : 'Upload Fingerprint Image'}
+                        </p>
+                        <p className="text-gray-400">
+                            Drag & drop or <span className="text-primary font-medium">browse files</span>
+                        </p>
+                    </div>
+
+                    {/* Supported Formats */}
+                    <div className="flex flex-wrap justify-center gap-2">
+                        {['JPG', 'PNG', 'BMP', 'GIF'].map((format) => (
+                            <span
+                                key={format}
+                                className="px-3 py-1 rounded-full bg-white/5 text-gray-400 text-xs font-medium"
+                            >
+                                .{format}
+                            </span>
+                        ))}
+                    </div>
+
+                    {/* Tips */}
+                    <div className="flex gap-6 text-xs text-gray-500 mt-4">
+                        <div className="flex items-center gap-2">
+                            <span>✨</span>
+                            <span>High resolution preferred</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span>🔒</span>
+                            <span>Processed locally</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}

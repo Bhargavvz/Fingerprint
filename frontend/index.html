@@ -2,16 +2,70 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/fingerprint.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="AI-powered fingerprint blood group detection using deep learning" />
-    <title>Fingerprint Blood Group Detection | AI Research Project</title>
+    <meta name="description" content="AI-powered fingerprint blood group detection using deep learning with EfficientNet-B3 and CBAM attention" />
+    <meta name="keywords" content="blood group detection, fingerprint analysis, deep learning, AI, medical research" />
+    
+    <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <title>BloodType AI - Fingerprint Blood Group Detection</title>
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="BloodType AI - Fingerprint Blood Group Detection" />
+    <meta property="og:description" content="AI-powered fingerprint analysis for blood group prediction using deep learning" />
+    <meta property="og:type" content="website" />
+    
+    <style>
+      /* Critical CSS for loading state */
+      body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f172a 100%);
+        min-height: 100vh;
+      }
+      
+      .loading-screen {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 24px;
+        color: white;
+        font-family: 'Inter', sans-serif;
+      }
+      
+      .loading-logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #ef4444, #6366f1, #ec4899);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        animation: pulse 2s infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Loading state shown before React hydrates -->
+      <div class="loading-screen">
+        <div class="loading-logo">🩸</div>
+        <div>Loading BloodType AI...</div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
