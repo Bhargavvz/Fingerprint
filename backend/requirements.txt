@@ -1,0 +1,24 @@
+# FastAPI Backend Requirements
+
+# Core ML/DL
+torch>=2.0.0
+torchvision>=0.15.0
+timm>=0.9.2
+
+# Data & Processing
+numpy>=1.24.0
+Pillow>=10.0.0
+opencv-python-headless>=4.8.0
+
+# API
+fastapi>=0.103.0
+uvicorn[standard]>=0.23.0
+python-multipart>=0.0.6
+
+# Configuration
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+
+# Explainability
+grad-cam>=1.4.8
+captum>=0.6.0
