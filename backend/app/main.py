@@ -84,7 +84,7 @@ async def startup_event():
     # Checkpoint path
     checkpoint_path = os.environ.get(
         "MODEL_CHECKPOINT",
-        str(project_root / "checkpoints" / "best.pt")
+        str(project_root / "checkpoints" / "best_model.pt")
     )
     
     # Initialize services
