@@ -2,40 +2,46 @@ import React from 'react';
 
 export default function AnimatedBackground() {
     return (
-        <div className="animated-bg">
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/50 via-purple-950/30 to-slate-950/50" />
+        <div className="fixed inset-0 z-0 overflow-hidden">
+            {/* Base Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-indigo-950/50 to-slate-950" />
 
-            {/* Floating Orbs */}
-            <div className="orb orb-1" />
-            <div className="orb orb-2" />
-            <div className="orb orb-3" />
-
-            {/* Grid Pattern */}
+            {/* Static Orbs - no animation */}
             <div
-                className="absolute inset-0 opacity-10"
+                className="absolute w-[500px] h-[500px] rounded-full blur-[100px] opacity-20"
                 style={{
-                    backgroundImage: `
-            linear-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 1px)
-          `,
-                    backgroundSize: '60px 60px'
+                    background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                    top: '-10%',
+                    left: '-10%'
+                }}
+            />
+            <div
+                className="absolute w-[400px] h-[400px] rounded-full blur-[100px] opacity-15"
+                style={{
+                    background: 'linear-gradient(135deg, #ec4899, #f43f5e)',
+                    bottom: '-5%',
+                    right: '-5%'
+                }}
+            />
+            <div
+                className="absolute w-[300px] h-[300px] rounded-full blur-[80px] opacity-10"
+                style={{
+                    background: 'linear-gradient(135deg, #06b6d4, #22d3ee)',
+                    top: '40%',
+                    left: '50%',
+                    transform: 'translateX(-50%)'
                 }}
             />
 
-            {/* Radial Gradient Spotlight */}
-            <div
-                className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] opacity-30"
-                style={{
-                    background: 'radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 60%)'
-                }}
-            />
-
-            {/* Noise Texture Overlay */}
+            {/* Subtle Grid Pattern */}
             <div
                 className="absolute inset-0 opacity-[0.03]"
                 style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`
+                    backgroundImage: `
+                        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
+                    `,
+                    backgroundSize: '80px 80px'
                 }}
             />
         </div>
