@@ -25,11 +25,11 @@ sudo apt-get install -y \
     tmux \
     vim \
     build-essential \
-    python3.10 \
-    python3.10-venv \
+    python3 \
+    python3-venv \
     python3-pip \
-    libgl1-mesa-glx \
-    libglib2.0-0
+    libgl1 \
+    libglib2.0-0t64
 
 # Install Node.js 20.x for frontend
 echo "📦 Installing Node.js 20.x..."
