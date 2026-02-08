@@ -681,7 +681,7 @@ def main(rank=0, world_size=1, args=None):
         print("=" * 60)
         
         # Load best model
-        checkpoint = torch.load(checkpoint_dir / 'best_model.pt')
+        checkpoint = torch.load(checkpoint_dir / 'best_model.pt', weights_only=False)
         if distributed:
             model.module.load_state_dict(checkpoint['model_state_dict'])
         else:
