@@ -25,9 +25,13 @@ const BLOOD_GROUP_INFO = {
 export default function ResultCard({ result }) {
     if (!result) return null;
 
-    const bloodGroup = result.predicted_class;
+    const bloodGroup = result.blood_group || result.predicted_class;
     const confidence = result.confidence;
-    const probabilities = result.probabilities || {};
+    const probabilities = result.all_probabilities || result.probabilities || {};
+
+    // Guard against undefined bloodGroup
+    if (!bloodGroup) return null;
+
     const colors = BLOOD_GROUP_COLORS[bloodGroup] || BLOOD_GROUP_COLORS['O+'];
     const info = BLOOD_GROUP_INFO[bloodGroup] || {};
 
