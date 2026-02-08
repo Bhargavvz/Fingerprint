@@ -1,0 +1,9 @@
+{
+  "test_accuracy": 0.8933333333333333,
+  "test_f1_score": 0.893235506951255,
+  "test_loss": 0.2656845750993696,
+  "best_val_f1": 0.9259903600558459,
+  "total_epochs": 110,
+  "config": "configs/training_config.yaml",
+  "timestamp": "2026-02-09T02:30:19.146979"
+}
