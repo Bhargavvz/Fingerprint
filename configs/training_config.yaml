@@ -1,14 +1,14 @@
-# Training Configuration - Advanced
-# Optimized for 2x NVIDIA T4-16GB GPUs targeting 90%+ accuracy
+# Training Configuration - Optimized for 95%+ Accuracy
+# Single-GPU training (simpler and more reliable)
 
 # Model Configuration
 model:
   name: "efficientnet_b3_cbam"
   pretrained: true
   num_classes: 8
-  dropout: 0.4
+  dropout: 0.5  # Increased for regularization
   attention_reduction: 16
-  use_gradient_checkpointing: true
+  use_gradient_checkpointing: false
 
 # Data Configuration
 data:
@@ -17,9 +17,8 @@ data:
   train_split: 0.70
   val_split: 0.15
   test_split: 0.15
-  num_workers: 8
+  num_workers: 4
   pin_memory: true
-  prefetch_factor: 2
 
 # Blood Group Classes
 classes:
@@ -34,85 +33,57 @@ classes:
 
 # Training Configuration
 training:
-  batch_size: 64  # Per GPU, total = 128 with 2 GPUs
-  epochs: 100
-  early_stopping_patience: 15
-  gradient_accumulation_steps: 2
+  batch_size: 32  # Smaller for better generalization
+  epochs: 150
+  early_stopping_patience: 25
   gradient_clip_max_norm: 1.0
 
-# Multi-GPU Configuration
-distributed:
-  enabled: true
-  backend: "nccl"
-  world_size: 2
-
-# Optimizer Configuration
+# Optimizer Configuration - Lower LR for fine-tuning
 optimizer:
   name: "adamw"
-  lr: 0.0003
+  lr: 0.0001  # Lower for stability
   weight_decay: 0.05
   betas: [0.9, 0.999]
 
 # Learning Rate Scheduler
 scheduler:
   name: "cosine_annealing_warm_restarts"
-  T_0: 10
+  T_0: 15
   T_mult: 2
   eta_min: 0.000001
-  warmup_epochs: 5
-  warmup_lr: 0.00001
 
 # Loss Function
 loss:
   name: "focal_loss"
   gamma: 2.0
-  alpha: null  # Computed from class weights
-  label_smoothing: 0.1
+  alpha: null
+  label_smoothing: 0.15  # Increased for smoother predictions
 
-# Advanced Data Augmentation
+# Data Augmentation
 augmentation:
-  # Progressive resizing stages
-  progressive_resizing:
-    enabled: true
-    stages: [160, 192, 224]
-    stage_epochs: [20, 20, 60]
-  
   train:
     horizontal_flip: true
     vertical_flip: false
-    rotation: 20
-    brightness: 0.3
-    contrast: 0.3
-    saturation: 0.2
-    hue: 0.1
-    gaussian_blur: 0.2
-    gaussian_noise: 0.1
-    elastic_transform: true
-    grid_distortion: true
-    optical_distortion: true
-    coarse_dropout: true
+    rotation: 15
+    brightness: 0.2
+    contrast: 0.2
     
     # MixUp and CutMix
     mixup:
       enabled: true
-      alpha: 0.4
+      alpha: 0.3  # Slightly reduced
     cutmix:
       enabled: true
       alpha: 1.0
-    mix_probability: 0.5  # Probability of applying MixUp or CutMix
-    
-  val:
-    normalize_only: true
-    
+    mix_probability: 0.4  # Reduced to preserve more real samples
+
   # Test-Time Augmentation
   tta:
     enabled: true
-    transforms: ["horizontal_flip", "rotate_90", "rotate_270"]
-    merge_mode: "mean"
+    transforms: ["horizontal_flip"]
 
 # Mixed Precision Training
 mixed_precision: true
-compile_model: false  # torch.compile for PyTorch 2.0+
 
 # Checkpointing
 checkpoint:
@@ -122,32 +93,22 @@ checkpoint:
   save_every_n_epochs: 10
   monitor: "val_f1"
   mode: "max"
-  keep_top_k: 3
 
 # Logging
 logging:
   log_dir: "outputs/logs"
-  log_interval: 10
   tensorboard: true
-  wandb: false
 
-# Output Configuration
+# Output Configuration  
 outputs:
   dir: "outputs"
   save_training_curves: true
   save_confusion_matrix: true
   save_roc_curves: true
   save_per_class_metrics: true
-  save_gradcam_samples: true
-
-# Cross Validation
-cross_validation:
-  enabled: false
-  n_folds: 5
-  stratified: true
 
 # Random Seed
 seed: 42
 
 # Device
-device: "auto"  # auto, cuda, cpu
+device: "auto"

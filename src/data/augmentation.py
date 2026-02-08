@@ -59,18 +59,18 @@ def get_train_transforms(
             min_height=image_size,
             min_width=image_size,
             border_mode=0,
-            value=(128, 128, 128)
+            fill=(128, 128, 128)
         ),
         
         # Geometric augmentations
         A.HorizontalFlip(p=0.5),
         A.Rotate(limit=rotation_limit, p=0.5, border_mode=0),
-        A.ShiftScaleRotate(
-            shift_limit=0.1,
-            scale_limit=0.1,
-            rotate_limit=0,
+        A.Affine(
+            translate_percent={"x": (-0.1, 0.1), "y": (-0.1, 0.1)},
+            scale=(0.9, 1.1),
+            rotate=0,
             p=0.3,
-            border_mode=0
+            mode=0
         ),
         
         # Elastic deformation - particularly useful for fingerprints
@@ -96,8 +96,8 @@ def get_train_transforms(
             A.MotionBlur(blur_limit=3, p=1.0),
         ], p=0.2),
         
-        # Noise
-        A.GaussNoise(var_limit=(5, 25), p=0.2),
+        # Noise - using std_range instead of deprecated var_limit
+        A.GaussNoise(std_range=(0.02, 0.1), p=0.2),
         
         # Fingerprint-specific: enhance ridge patterns
         A.OneOf([
@@ -128,7 +128,7 @@ def get_val_transforms(image_size: int = 224) -> AlbumentationsTransform:
             min_height=image_size,
             min_width=image_size,
             border_mode=0,
-            value=(128, 128, 128)
+            fill=(128, 128, 128)
         ),
         
         # Normalize and convert to tensor
@@ -162,7 +162,7 @@ def get_tta_transforms(image_size: int = 224) -> list:
                 min_height=image_size,
                 min_width=image_size,
                 border_mode=0,
-                value=(128, 128, 128)
+                fill=(128, 128, 128)
             ),
             A.HorizontalFlip(p=1.0),
             A.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD),
